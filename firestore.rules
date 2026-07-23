@@ -1,0 +1,18 @@
+rules_version = '2';
+
+// NoteSync Firestore Security Rules
+// -----------------------------------------------------------------------------
+// All cloud data is namespaced per user under `users/{uid}`:
+//   users/{uid}/notes/{noteId}
+//   users/{uid}/notes/{noteId}/updates/{updateId}   (Yjs CRDT updates)
+//   users/{uid}/notes/{noteId}/versions/{versionId} (snapshots)
+//
+// A signed-in user may read/write ONLY their own subtree. Everything else is
+// denied by default.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{uid}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

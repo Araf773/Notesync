@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// NoteSync Firebase Storage rules — for note image/attachment uploads.
+// Images live under the owner's UID and are limited to reasonable image types/sizes.
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /users/{uid}/notes/{noteId}/{fileName} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null
+        && request.auth.uid == uid
+        && request.resource.size < 10 * 1024 * 1024              // 10 MB cap
+        && request.resource.contentType.matches('image/.*');     // images only
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

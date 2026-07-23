@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">NoteSync</string>
+    <string name="title_activity_main">NoteSync</string>
+    <string name="package_name">com.notesync.app</string>
+    <string name="custom_url_scheme">com.notesync.app</string>
+</resources>
